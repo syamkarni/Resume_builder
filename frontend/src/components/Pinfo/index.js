@@ -15,6 +15,7 @@ const Pinfo = () => {
                 <label htmlFor="plink">Personal link:</label><br />
                 <input type="url" id="plink" name="plink" required /><br />
                 <div className="address-container">
+                {/* add options for the country and state */}
                     <label htmlFor="address">Address:</label><br />
                     <input type="text" id="address" name="address" required /><br />
                     <label htmlFor="city">City:</label><br />
