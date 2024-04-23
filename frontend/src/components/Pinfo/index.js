@@ -13,6 +13,7 @@ const Pinfo = () => {
                 <label htmlFor="phone">Phone:</label><br />
                 <input type="tel" id="phone" name="phone" required /><br />
                 <label htmlFor="plink">Personal link:</label><br />
+                {/* add github and linkedin als */}
                 <input type="url" id="plink" name="plink" required /><br />
                 <div className="address-container">
                 {/* add options for the country and state */}
