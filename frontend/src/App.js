@@ -5,6 +5,7 @@ import Description from './components/Description';
 import Pinfo from './components/Pinfo';
 import Work from './components/Work';
 import Education from './components/Education';
+import Project from './components/Project';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/Pinfo" element={<Pinfo />} />
         <Route path="/Work" element={<Work />} />
         <Route path="/Education" element={<Education />} />
+        <Route path="/Project" element={<Project />} />
       </Routes>
     </Router>
   );
