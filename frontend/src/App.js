@@ -7,6 +7,7 @@ import Work from './components/Work';
 import Education from './components/Education';
 import Project from './components/Project';
 import EActivities from './components/EActivities';
+import VData from './components/VData';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/Education" element={<Education />} />
         <Route path="/Project" element={<Project />} />
         <Route path="/EActivities" element={<EActivities />} />
+        <Route path="/VData" element={<VData />} />
       </Routes>
     </Router>
   );
