@@ -6,6 +6,7 @@ import Pinfo from './components/Pinfo';
 import Work from './components/Work';
 import Education from './components/Education';
 import Project from './components/Project';
+import EActivities from './components/EActivities';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/Work" element={<Work />} />
         <Route path="/Education" element={<Education />} />
         <Route path="/Project" element={<Project />} />
+        <Route path="/EActivities" element={<EActivities />} />
       </Routes>
     </Router>
   );
