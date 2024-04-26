@@ -11,16 +11,28 @@ const Project = () => {
     descriptions: ['']
   });
 
+  const [endDateError, setEndDateError] = useState(false);
+
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'descriptions') {
-      const updatedDescriptions = [...currentProject.descriptions];
-      updatedDescriptions[index] = value;
-      setCurrentProject({ ...currentProject, descriptions: updatedDescriptions });
+        const updatedDescriptions = [...currentProject.descriptions];
+        updatedDescriptions[index] = value;
+        setCurrentProject({ ...currentProject, descriptions: updatedDescriptions });
+    } else if (name === "endDate") {
+        const startDate = new Date(currentProject.startDate);
+        const endDate = new Date(value);
+        if (endDate <= startDate) {
+            setEndDateError(true);
+        } else {
+            setEndDateError(false);
+            setCurrentProject({ ...currentProject, [name]: value });
+        }
     } else {
-      setCurrentProject({ ...currentProject, [name]: value });
+        setCurrentProject({ ...currentProject, [name]: value });
     }
-  };
+};
+
 
   const addDescriptionField = () => {
     setCurrentProject({
@@ -30,16 +42,19 @@ const Project = () => {
   };
 
   const addProject = () => {
-    setProjects([...projects, currentProject]);
-    setCurrentProject({
-      projectName: '',
-      url: '',
-      subtitle: '',
-      startDate: '',
-      endDate: '',
-      descriptions: ['']
-    });
-  };
+    if (!endDateError && currentProject.startDate) {
+        setProjects([...projects, currentProject]);
+        setCurrentProject({
+            projectName: '',
+            url: '',
+            subtitle: '',
+            startDate: '',
+            endDate: '',
+            descriptions: ['']
+        });
+    }
+};
+
 
   return (
     <div className="section-container" id="project">
@@ -91,6 +106,7 @@ const Project = () => {
           value={currentProject.endDate}
           onChange={handleInputChange}
         /><br />
+        {endDateError && <div className="error">End date must be greater than start date.</div>}
 
         {currentProject.descriptions.map((description, index) => (
           <div key={index}>
