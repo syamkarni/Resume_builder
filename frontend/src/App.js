@@ -20,7 +20,7 @@ const App = () => {
         <Route path="/Project" element={<Project />} />
         <Route path="/EActivities" element={<EActivities />} />
         <Route path="/VData" element={<VData />} />
-        {/* comment here */}
+
       </Routes>
     </Router>
   );
