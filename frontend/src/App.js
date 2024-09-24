@@ -8,6 +8,9 @@ import Education from './components/Education';
 import Project from './components/Project';
 import EActivities from './components/EActivities';
 import VData from './components/VData';
+import Certificates from './components/Certificates';
+import Awards from './components/Awards';
+import Skills from './components/Skills';
 
 const App = () => {
   return (
@@ -20,7 +23,9 @@ const App = () => {
         <Route path="/Project" element={<Project />} />
         <Route path="/EActivities" element={<EActivities />} />
         <Route path="/VData" element={<VData />} />
-
+        <Route path="/Certificates" element={<Certificates />} />
+        <Route path="/Awards" element={<Awards />} />
+        <Route path="/Skills" element={<Skills />} />
       </Routes>
     </Router>
   );

@@ -16,7 +16,7 @@ const Work = () => {
     const { name, value } = e.target;
     if (name === "descriptions") {
       const updatedDescriptions = [...currentWork.descriptions];
-      updatedDescriptions[index] = value;
+      updatedDescriptions[index] = value; 
       setCurrentWork({ ...currentWork, descriptions: updatedDescriptions });
     } else if (name === "endDate") {
       const startDate = new Date(currentWork.startDate);
