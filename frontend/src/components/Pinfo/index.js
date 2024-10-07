@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Pinfo = () => {
     const navigate = useNavigate();
+    const [profileLinks, setProfileLinks] = useState({
+        github: '',
+        linkedin: ''
+    });
+
+    const handleProfileChange = (e) => {
+        const { name, value } = e.target;
+        setProfileLinks({ ...profileLinks, [name]: value });
+    };
 
     return (
         <div className="section-container" id="Pinfo">
@@ -18,6 +27,26 @@ const Pinfo = () => {
                 <label htmlFor="plink">Personal link:</label><br />
                 {/* add github and linkedin als */}
                 <input type="url" id="plink" name="plink" required /><br />
+                {/* GitHub and LinkedIn profile fields */}
+                <label htmlFor="github">GitHub URL:</label><br />
+                <input
+                    type="url"
+                    id="github"
+                    name="github"
+                    value={profileLinks.github}
+                    onChange={handleProfileChange}
+                    placeholder="https://github.com/yourusername"
+                /><br />
+
+                <label htmlFor="linkedin">LinkedIn URL:</label><br />
+                <input
+                    type="url"
+                    id="linkedin"
+                    name="linkedin"
+                    value={profileLinks.linkedin}
+                    onChange={handleProfileChange}
+                    placeholder="https://www.linkedin.com/in/yourprofile"
+                /><br />
                 <div className="address-container">
                 {/* add options for the country and state */}
                     <label htmlFor="address">Address:</label><br />
