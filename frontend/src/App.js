@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import BaseLayout from './components/BaseLayout';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Description from './components/Description';
 import Pinfo from './components/Pinfo';
@@ -16,16 +17,18 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/Description" element={<Description />} />
-        <Route path="/Pinfo" element={<Pinfo />} />
-        <Route path="/Work" element={<Work />} />
-        <Route path="/Education" element={<Education />} />
-        <Route path="/Project" element={<Project />} />
-        <Route path="/EActivities" element={<EActivities />} />
-        <Route path="/VData" element={<VData />} />
-        <Route path="/Certificates" element={<Certificates />} />
-        <Route path="/Awards" element={<Awards />} />
-        <Route path="/Skills" element={<Skills />} />
+          <Route path="/" element={<BaseLayout />}>
+          <Route path="/Description" element={<Description />} />
+          <Route path="/Pinfo" element={<Pinfo />} />
+          <Route path="/Work" element={<Work />} />
+          <Route path="/Education" element={<Education />} />
+          <Route path="/Project" element={<Project />} />
+          <Route path="/EActivities" element={<EActivities />} />
+          <Route path="/VData" element={<VData />} />
+          <Route path="/Certificates" element={<Certificates />} />
+          <Route path="/Awards" element={<Awards />} />
+          <Route path="/Skills" element={<Skills />} />
+        </Route>
       </Routes>
     </Router>
   );
