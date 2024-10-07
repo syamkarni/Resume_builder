@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Awards = () => {
+  const navigate = useNavigate();
   const [awards, setAwards] = useState([]);
   const [currentAward, setCurrentAward] = useState({
     title: '',
@@ -126,6 +127,9 @@ const Awards = () => {
           ))}
         </div>
       </div>
+      <br />
+      <button onClick={() => navigate('/Certificates')}>Back</button>
+      <button onClick={() => navigate('/Skills')}>Next</button>
     </div>
   );
 };

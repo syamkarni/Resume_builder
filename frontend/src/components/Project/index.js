@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Project = () => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [currentProject, setCurrentProject] = useState({
     projectName: '',
@@ -137,6 +138,9 @@ const Project = () => {
           </div>
         ))}
       </div>
+      <br />
+      <button onClick={() => navigate('/Education')}>Back</button>
+      <button onClick={() => navigate('/Eactivities')}>Next</button>
     </div>
   );
 };

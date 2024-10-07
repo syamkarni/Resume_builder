@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Pinfo = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="section-container" id="Pinfo">
             <div className="section-main">
@@ -27,6 +30,8 @@ const Pinfo = () => {
                     <input type="text" id="country" name="country" required /><br />
                 </div>
             </div>
+            <button onClick={() => navigate('/Description')}>Back</button>
+            <button onClick={() => navigate('/Work')}>Next</button>
         </div>
     );
 }

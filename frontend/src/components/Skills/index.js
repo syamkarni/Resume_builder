@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Skills = () => {
+  const navigate = useNavigate();
   const [skillsData, setSkillsData] = useState([]);
   const [currentCategory, setCurrentCategory] = useState({
     category: '',
@@ -180,6 +181,8 @@ const Skills = () => {
 
         
       </div>
+      <br />
+      <button onClick={() => navigate('/Awards')}>Back</button>
     </div>
   );
 };

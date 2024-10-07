@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const VData = () => {
+  const navigate = useNavigate();
   const [volunteerData, setVolunteerData] = useState([]);
   const [currentVolunteer, setCurrentVolunteer] = useState({
     organization: '',
@@ -147,6 +148,9 @@ const VData = () => {
       </div>
     ))}
     </div>
+    <br />
+    <button onClick={() => navigate('/EActivities')}>Back</button>
+    <button onClick={() => navigate('/Certificates')}>Next</button>
 </div>
 );
 };

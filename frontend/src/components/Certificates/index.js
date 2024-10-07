@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Certificates = () => {
+  const navigate = useNavigate();
   const [certificates, setCertificates] = useState([]);
   const [currentCertificate, setCurrentCertificate] = useState({
     name: '',
@@ -81,6 +82,9 @@ const Certificates = () => {
           ))}
         </div>
       </div>
+      <br />
+      <button onClick={() => navigate('/Vdata')}>Back</button>
+      <button onClick={() => navigate('/Awards')}>Next</button>
     </div>
   );
 };

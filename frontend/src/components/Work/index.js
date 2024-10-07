@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Work = () => {
+  const navigate = useNavigate();
   const [workExperiences, setWorkExperiences] = useState([]);
   const [currentWork, setCurrentWork] = useState({
     companyName: '',
@@ -133,6 +135,9 @@ const Work = () => {
           </div>
         ))}
       </div>
+      <br />
+      <button onClick={() => navigate('/Pinfo')}>Back</button>
+      <button onClick={() => navigate('/Education')}>Next</button>
     </div>
   );
 };

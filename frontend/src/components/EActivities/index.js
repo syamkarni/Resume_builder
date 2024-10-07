@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const EActivities = () => {
+  const navigate = useNavigate();
   const [activities, setActivities] = useState([]);
   const [currentActivity, setCurrentActivity] = useState({
     organization: '',
@@ -146,6 +147,9 @@ const EActivities = () => {
           </div>
         ))}
       </div>
+      <br />
+      <button onClick={() => navigate('/Project')}>Back</button>
+      <button onClick={() => navigate('/Vdata')}>Next</button>
     </div>
   );
 };

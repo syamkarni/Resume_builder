@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Education = () => {
+  const navigate = useNavigate();
   const [education, setEducation] = useState([]);
   const [currentEducation, setCurrentEducation] = useState({
     instituteName: '',
@@ -120,6 +122,9 @@ const Education = () => {
 
         <button type="button" onClick={addEducation}>Add Education</button>
       </div>
+      <br />
+      <button onClick={() => navigate('/Work')}>Back</button>
+      <button onClick={() => navigate('/Project')}>Next</button>
 
       {/* Display the list of educations */}
       {education.map((edu, index) => (
