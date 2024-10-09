@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const VData = () => {
   const navigate = useNavigate();
   const [volunteerData, setVolunteerData] = useState([]);
@@ -41,9 +42,29 @@ const VData = () => {
     }));
   };
 
-  const addVolunteerEntry = () => {
+  const addVolunteerEntry = async () => {
     if (!endDateError && currentVolunteer.startDate) {
       setVolunteerData(current => [...current, currentVolunteer]);
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/save_volunteer_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ volunteerData: [...volunteerData, currentVolunteer] }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save volunteer data');
+        }
+
+        const data = await response.json();
+        console.log('Volunteer data saved:', data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
       setCurrentVolunteer({
         organization: '',
         position: '',
@@ -121,38 +142,41 @@ const VData = () => {
         {endDateError && <div className="error">End date must be after the start date.</div>}
         <br />
         {currentVolunteer.highlights.map((highlight, index) => (
-      <div key={index}>
-        <label htmlFor={`highlight-${index}`}>Highlight:</label><br />
-        <input
-          type="text"
-          id={`highlight-${index}`}
-          name="highlights"
-          value={highlight}
-          onChange={(e) => handleInputChange(e, index)}
-          required
-        /><br />
-      </div>
-    ))}
-    <button type="button" onClick={addHighlightField}>Add Highlight</button><br />
-    <button type="button" onClick={addVolunteerEntry}>Add Volunteer Entry</button>
+          <div key={index}>
+            <label htmlFor={`highlight-${index}`}>Highlight:</label><br />
+            <input
+              type="text"
+              id={`highlight-${index}`}
+              name="highlights"
+              value={highlight}
+              onChange={(e) => handleInputChange(e, index)}
+              required
+            /><br />
+          </div>
+        ))}
+        <button type="button" onClick={addHighlightField}>Add Highlight</button><br />
+        <button type="button" onClick={addVolunteerEntry}>Add Volunteer Entry</button>
 
-    {volunteerData.map((volunteer, index) => (
-      <div key={index}>
-        <h3>{volunteer.organization} - {volunteer.position}</h3>
-        <p>{volunteer.location}</p>
-        {volunteer.url && <p>URL: <a href={volunteer.url} target="_blank" rel="noopener noreferrer">{volunteer.url}</a></p>}
-        <p>{volunteer.startDate} to {volunteer.endDate}</p>
-        {volunteer.highlights.map((highlight, highlightIndex) => (
-          <p key={highlightIndex}>{highlight}</p>
+        {volunteerData.map((volunteer, index) => (
+          <div key={index}>
+            <h3>{volunteer.organization} - {volunteer.position}</h3>
+            <p>{volunteer.location}</p>
+            {volunteer.url && <p>URL: <a href={volunteer.url} target="_blank" rel="noopener noreferrer">{volunteer.url}</a></p>}
+            <p>{volunteer.startDate} to {volunteer.endDate}</p>
+            {volunteer.highlights.map((highlight, highlightIndex) => (
+              <p key={highlightIndex}>{highlight}</p>
+            ))}
+          </div>
         ))}
       </div>
-    ))}
+      <br />
+      <button onClick={() => navigate('/EActivities')}>Back</button>
+      <button onClick={() => {
+        addVolunteerEntry();
+        navigate('/Certificates');
+      }}>Next</button>
     </div>
-    <br />
-    <button onClick={() => navigate('/EActivities')}>Back</button>
-    <button onClick={() => navigate('/Certificates')}>Next</button>
-</div>
-);
+  );
 };
 
 export default VData;

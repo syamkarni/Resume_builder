@@ -52,6 +52,27 @@ const Work = () => {
     }
   };
 
+  const saveAllWorkExperiences = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save_work_experience', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ workExperiences }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save work experiences');
+      }
+
+      const data = await response.json();
+      console.log('Work experiences saved:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className="section-container" id="work">
       <div className="section-main">
@@ -105,7 +126,6 @@ const Work = () => {
           required
         /><br />
         {endDateError && <div className="error">End date must be greater than start date</div>}
-        {/* add styling for the error and make sure that the text is smaller and in red */}
 
         {currentWork.descriptions.map((description, index) => (
           <div key={index} className="work-description">
@@ -137,7 +157,14 @@ const Work = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Pinfo')}>Back</button>
-      <button onClick={() => navigate('/Education')}>Next</button>
+      <button
+        onClick={() => {
+          saveAllWorkExperiences();
+          navigate('/Education');
+        }}
+      >
+        Next
+      </button>
     </div>
   );
 };

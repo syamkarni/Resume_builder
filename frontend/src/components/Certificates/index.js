@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const Certificates = () => {
   const navigate = useNavigate();
   const [certificates, setCertificates] = useState([]);
@@ -15,9 +16,29 @@ const Certificates = () => {
     setCurrentCertificate((prev) => ({ ...prev, [name]: value }));
   };
 
-  const addCertificate = () => {
+  const addCertificate = async () => {
     if (currentCertificate.name && currentCertificate.date && currentCertificate.issuer) {
       setCertificates((prev) => [...prev, currentCertificate]);
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/save_certificates', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ certificates: [...certificates, currentCertificate] }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save certificate');
+        }
+
+        const data = await response.json();
+        console.log('Certificate saved:', data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
       setCurrentCertificate({
         name: '',
         date: '',
@@ -84,7 +105,10 @@ const Certificates = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Vdata')}>Back</button>
-      <button onClick={() => navigate('/Awards')}>Next</button>
+      <button onClick={() => {
+        addCertificate();
+        navigate('/Awards');
+      }}>Next</button>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const EActivities = () => {
   const navigate = useNavigate();
   const [activities, setActivities] = useState([]);
@@ -54,6 +55,27 @@ const EActivities = () => {
         highlights: ['']
       });
       setEndDateError(false);
+    }
+  };
+
+  const saveAllActivities = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save_extracurricular', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ activities }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save activities');
+      }
+
+      const data = await response.json();
+      console.log('Activities saved:', data);
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -149,7 +171,14 @@ const EActivities = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Project')}>Back</button>
-      <button onClick={() => navigate('/Vdata')}>Next</button>
+      <button
+        onClick={() => {
+          saveAllActivities();
+          navigate('/Vdata');
+        }}
+      >
+        Next
+      </button>
     </div>
   );
 };

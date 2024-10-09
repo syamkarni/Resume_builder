@@ -39,9 +39,11 @@ const BaseLayout = () => {
         <Outlet />
       </main>
 
+      {/* Commented out footer
       <footer>
         <p>&copy; Footer here</p>
       </footer>
+      */}
     </div>
   );
 }

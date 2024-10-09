@@ -30,9 +30,29 @@ const Awards = () => {
     }));
   };
 
-  const addAward = () => {
+  const addAward = async () => {
     if (currentAward.title && currentAward.date && currentAward.issuer) {
       setAwards((prev) => [...prev, currentAward]);
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/save_awards', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ awards: [...awards, currentAward] }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save award');
+        }
+
+        const data = await response.json();
+        console.log('Award saved:', data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
       setCurrentAward({
         title: '',
         date: '',
@@ -129,7 +149,10 @@ const Awards = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Certificates')}>Back</button>
-      <button onClick={() => navigate('/Skills')}>Next</button>
+      <button onClick={() => {
+        addAward();
+        navigate('/Skills');
+      }}>Next</button>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Education = () => {
   const navigate = useNavigate();
-  const [education, setEducation] = useState([]);
+  const [educations, setEducations] = useState([]); 
   const [currentEducation, setCurrentEducation] = useState({
     instituteName: '',
     url: '',
@@ -33,7 +33,7 @@ const Education = () => {
 
   const addEducation = () => {
     if (!endDateError && currentEducation.startDate && currentEducation.endDate) {
-      setEducation(current => [...current, currentEducation]);
+      setEducations(current => [...current, currentEducation]); 
       setCurrentEducation({
         instituteName: '',
         url: '',
@@ -43,7 +43,28 @@ const Education = () => {
         endDate: '',
         location: ''
       });
-      setEndDateError(false); // Resetting the end date error as well
+      setEndDateError(false);
+    }
+  };
+
+  const saveAllEducations = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save_education', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ educations }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save educations');
+      }
+
+      const data = await response.json();
+      console.log('Education data saved:', data);
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -124,10 +145,16 @@ const Education = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Work')}>Back</button>
-      <button onClick={() => navigate('/Project')}>Next</button>
+      <button
+        onClick={() => {
+          saveAllEducations(); 
+          navigate('/Project');
+        }}
+      >
+        Next
+      </button>
 
-      {/* Display the list of educations */}
-      {education.map((edu, index) => (
+      {educations.map((edu, index) => (
         <div key={index} className="education-entry">
           <h3>{edu.instituteName}</h3>
           <p>{edu.area} - {edu.studyType}</p>

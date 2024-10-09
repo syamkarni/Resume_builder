@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const Project = () => {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([]);  
   const [currentProject, setCurrentProject] = useState({
     projectName: '',
     url: '',
@@ -32,8 +33,7 @@ const Project = () => {
     } else {
         setCurrentProject({ ...currentProject, [name]: value });
     }
-};
-
+  };
 
   const addDescriptionField = () => {
     setCurrentProject({
@@ -54,8 +54,28 @@ const Project = () => {
             descriptions: ['']
         });
     }
-};
+  };
 
+  const saveAllProjects = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save_projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projects }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save projects');
+      }
+
+      const data = await response.json();
+      console.log('Projects saved:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <div className="section-container" id="project">
@@ -140,7 +160,14 @@ const Project = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Education')}>Back</button>
-      <button onClick={() => navigate('/Eactivities')}>Next</button>
+      <button
+        onClick={() => {
+          saveAllProjects(); 
+          navigate('/Eactivities');
+        }}
+      >
+        Next
+      </button>
     </div>
   );
 };
