@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const Skills = () => {
   const navigate = useNavigate();
   const [skillsData, setSkillsData] = useState([]);
@@ -75,6 +76,33 @@ const Skills = () => {
       setCurrentInterest('');
     }
   };
+
+  const saveSkills = (event) => {
+    event.preventDefault(); 
+
+    const skillsPayload = {
+      skills: skillsData,
+      languages: languages,
+      interests: interests,
+    };
+    
+    console.log('Skills saved:', skillsPayload);
+  
+    fetch('http://127.0.0.1:5000/save_skills', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(skillsPayload),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  };  
 
   return (
     <div className="section-container" id="skills">
@@ -178,11 +206,10 @@ const Skills = () => {
             </div>
           ))}
         </div>
-
-        
       </div>
       <br />
       <button onClick={() => navigate('/Awards')}>Back</button>
+      <button onClick={saveSkills}>Save</button>
     </div>
   );
 };

@@ -38,9 +38,16 @@ def save_projects():
 @app.route('/save_skills', methods=['POST'])
 def save_skills():
     data = request.json
-    resume_data['skills'] = data
+    resume_data['skills'] = data.get('skills', [])
+    resume_data['languages'] = data.get('languages', [])
+    resume_data['interests'] = data.get('interests', [])
+    
     print(resume_data['skills'])
-    return jsonify({"message": "Skills saved successfully", "data": resume_data['skills']}), 200
+    print(resume_data['languages'])
+    print(resume_data['interests'])
+
+    return jsonify({"message": "Skills data saved successfully", "data": resume_data}), 200
+
 
 @app.route('/save_certificates', methods=['POST'])
 def save_certificates():
