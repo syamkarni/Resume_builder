@@ -12,12 +12,14 @@ import VData from './components/VData';
 import Certificates from './components/Certificates';
 import Awards from './components/Awards';
 import Skills from './components/Skills';
+import Ujson from './components/Ujson';
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/ujson" element={<Ujson />} />
         <Route path="/" element={<BaseLayout />}>
           <Route path="description" element={<Description />} />
           <Route path="pinfo" element={<Pinfo />} />

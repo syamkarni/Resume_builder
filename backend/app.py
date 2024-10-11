@@ -3,7 +3,7 @@ from flask_cors import CORS
 import json, os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 
 resume_data = {
@@ -106,6 +106,19 @@ def save_description():
     resume_data['description'] = data.get('description', '')
     print(resume_data['description'])
     return jsonify({"message": "Description saved successfully"}), 200
+
+@app.route('/upload_resume', methods=['POST'])
+def upload_resume():
+    try:
+        data = request.json
+        global resume_data
+        resume_data = data 
+
+        print(resume_data)
+        return jsonify({"message": "Resume data uploaded successfully", "data": resume_data}), 200
+    except Exception as e:
+        print(f"Error uploading resume data: {e}")
+        return jsonify({"error": "Failed to upload resume data"}), 500
 
 
 #------------------------------------------------------------------------------------------------
