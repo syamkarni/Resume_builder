@@ -1,11 +1,26 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
+import json, os
 
 app = Flask(__name__)
 CORS(app)
 
 
-resume_data = {}
+resume_data = {
+    "personal": {}, 
+    "work": [],
+    "education": [],
+    "projects": [],
+    "skills": [],
+    "languages": [],
+    "interests": [],
+    "certificates": [],
+    "awards": [],
+    "extracurricular": [],
+    "volunteer_data": [],
+    "description": ""
+}
+
 
 @app.route('/save_personal_info', methods=['POST'])
 def save_personal_info():
@@ -41,12 +56,20 @@ def save_skills():
     resume_data['skills'] = data.get('skills', [])
     resume_data['languages'] = data.get('languages', [])
     resume_data['interests'] = data.get('interests', [])
-    
     print(resume_data['skills'])
     print(resume_data['languages'])
     print(resume_data['interests'])
-
     return jsonify({"message": "Skills data saved successfully", "data": resume_data}), 200
+
+@app.route('/download_json', methods=['GET'])
+def download_json():
+    file_path = 'resume_data.json'
+
+    with open(file_path, 'w') as json_file:
+        json.dump(resume_data, json_file, indent=4)
+    
+
+    return send_file(file_path, as_attachment=True)
 
 
 @app.route('/save_certificates', methods=['POST'])

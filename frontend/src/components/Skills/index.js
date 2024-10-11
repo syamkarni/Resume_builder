@@ -34,7 +34,6 @@ const Skills = () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_skills');
       const data = await response.json();
-
       setSkillsData(data.skills || []);
       setLanguages(data.languages || []);
       setInterests(data.interests || []);
@@ -119,6 +118,21 @@ const Skills = () => {
     .catch((error) => {
       console.error('Error:', error);
     });
+  };
+
+  const downloadResumeJson = () => {
+    fetch('http://127.0.0.1:5000/download_json')
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'resume_data.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch(error => console.error('Error downloading JSON file:', error));
   };
 
   return (
@@ -227,6 +241,7 @@ const Skills = () => {
       <br />
       <button onClick={() => navigate('/Awards')}>Back</button>
       <button onClick={saveSkills}>Save</button>
+      <button onClick={downloadResumeJson}>Download Full Resume</button> {/* Trigger download for full resume */}
     </div>
   );
 };
