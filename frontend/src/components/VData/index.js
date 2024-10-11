@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const VData = () => {
@@ -14,7 +14,18 @@ const VData = () => {
     highlights: ['']
   });
   const [endDateError, setEndDateError] = useState(false);
-
+  useEffect(() => {
+    fetchVolunteerData();
+  }, []);
+  const fetchVolunteerData = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_volunteer_data');
+      const data = await response.json();
+      setVolunteerData(data.volunteer_data.volunteerData || []);
+    } catch (error) {
+      console.error('Error fetching volunteer data:', error);
+    }
+  };
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'highlights') {
@@ -43,7 +54,7 @@ const VData = () => {
   };
 
   const addVolunteerEntry = async () => {
-    if (!endDateError && currentVolunteer.startDate) {
+    if (!endDateError) {
       setVolunteerData(current => [...current, currentVolunteer]);
 
       try {

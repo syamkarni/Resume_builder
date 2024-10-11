@@ -80,12 +80,59 @@ def save_volunteer_data():
 @app.route('/save_description', methods=['POST'])
 def save_description():
     data = request.json
-    resume_data['description'] = data
+    resume_data['description'] = data.get('description', '')
     print(resume_data['description'])
-    return jsonify({"message": "Description saved successfully", "data": resume_data['description']}), 200
+    return jsonify({"message": "Description saved successfully"}), 200
 
 
+#------------------------------------------------------------------------------------------------
+#get end points here
 
+@app.route('/get_personal_info', methods=['GET'])
+def get_personal_info():
+    return jsonify({"personal": resume_data['personal']}), 200
+
+@app.route('/get_work_experience', methods=['GET'])
+def get_work_experience():
+    return jsonify({"workExperiences": resume_data['work']}), 200
+
+@app.route('/get_education', methods=['GET'])
+def get_education():
+    return jsonify({"education": resume_data['education']}), 200
+
+@app.route('/get_projects', methods=['GET'])
+def get_projects():
+    return jsonify({"projects": resume_data['projects']}), 200
+
+@app.route('/get_skills', methods=['GET'])
+def get_skills():
+    return jsonify({
+        "skills": resume_data['skills'],
+        "languages": resume_data['languages'],
+        "interests": resume_data['interests']
+    }), 200
+
+@app.route('/get_certificates', methods=['GET'])
+def get_certificates():
+    return jsonify({"certificates": resume_data['certificates']}), 200
+
+@app.route('/get_awards', methods=['GET'])
+def get_awards():
+    return jsonify({"awards": resume_data['awards']}), 200
+
+@app.route('/get_extracurricular', methods=['GET'])
+def get_extracurricular():
+    return jsonify({"extracurricular": resume_data['extracurricular']}), 200
+
+@app.route('/get_volunteer_data', methods=['GET'])
+def get_volunteer_data():
+    return jsonify({"volunteer_data": resume_data['volunteer_data']}), 200
+
+@app.route('/get_description', methods=['GET'])
+def get_description():
+    print("Fetching description:", resume_data)
+    return jsonify({"description": resume_data.get('description', '')}), 200
+#------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)

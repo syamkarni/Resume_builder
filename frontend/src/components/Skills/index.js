@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Skills = () => {
@@ -25,6 +25,23 @@ const Skills = () => {
     'Basic Proficiency',
     'Beginner'
   ];
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
+  const fetchSkills = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_skills');
+      const data = await response.json();
+
+      setSkillsData(data.skills || []);
+      setLanguages(data.languages || []);
+      setInterests(data.interests || []);
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+    }
+  };
 
   const handleSkillInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -102,7 +119,7 @@ const Skills = () => {
     .catch((error) => {
       console.error('Error:', error);
     });
-  };  
+  };
 
   return (
     <div className="section-container" id="skills">

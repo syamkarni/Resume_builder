@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Pinfo = () => {
@@ -17,6 +17,10 @@ const Pinfo = () => {
         country: ''
     });
 
+    useEffect(() => {
+        fetchPersonalInfo();
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setPersonalInfo((prevInfo) => ({
@@ -24,6 +28,16 @@ const Pinfo = () => {
             [name]: value
         }));
     };
+
+    const fetchPersonalInfo = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/get_personal_info');
+            const data = await response.json();
+            setPersonalInfo(data.personal);
+        } catch (error) {
+            console.error('Error fetching personal info:', error);
+        }
+    };    
 
     const savePersonalInfo = async () => {
         const response = await fetch('http://127.0.0.1:5000/save_personal_info', {

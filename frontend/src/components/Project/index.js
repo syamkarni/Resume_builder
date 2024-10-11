@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Project = () => {
@@ -12,9 +12,19 @@ const Project = () => {
     endDate: '',
     descriptions: ['']
   });
-
+  useEffect(() => {
+    fetchProjects();
+  }, []);
   const [endDateError, setEndDateError] = useState(false);
-
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_projects');
+      const data = await response.json();
+      setProjects(data.projects.projects || []);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
+  };
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'descriptions') {
@@ -43,7 +53,7 @@ const Project = () => {
   };
 
   const addProject = () => {
-    if (!endDateError && currentProject.startDate) {
+    if (!endDateError) {
         setProjects([...projects, currentProject]);
         setCurrentProject({
             projectName: '',

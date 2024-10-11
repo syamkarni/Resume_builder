@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Description = () => {
   const navigate = useNavigate();
   const [about, setAbout] = useState('');
 
+  useEffect(() => {
+    fetchDescription();
+  }, []);
+
   const handleInputChange = (e) => {
     setAbout(e.target.value);
+  };
+
+  const fetchDescription = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_description');
+      const data = await response.json();
+      setAbout(data.description);
+    } catch (error) {
+      console.error('Error fetching description:', error);
+    }
   };
 
   const saveDescription = async () => {

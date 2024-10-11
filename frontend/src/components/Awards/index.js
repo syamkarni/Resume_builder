@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Awards = () => {
   const navigate = useNavigate();
@@ -11,7 +11,18 @@ const Awards = () => {
     location: '',
     highlights: ['']
   });
-
+  useEffect(() => {
+    fetchAwards();
+  }, []);
+  const fetchAwards = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_awards');
+      const data = await response.json();
+      setAwards(data.awards.awards || []);
+    } catch (error) {
+      console.error('Error fetching awards:', error);
+    }
+  };
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'highlights') {
@@ -31,7 +42,7 @@ const Awards = () => {
   };
 
   const addAward = async () => {
-    if (currentAward.title && currentAward.date && currentAward.issuer) {
+    if (currentAward.title) {
       setAwards((prev) => [...prev, currentAward]);
 
       try {

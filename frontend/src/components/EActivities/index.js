@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const EActivities = () => {
@@ -14,7 +14,18 @@ const EActivities = () => {
     highlights: ['']
   });
   const [endDateError, setEndDateError] = useState(false);
-
+  useEffect(() => {
+    fetchActivities();
+  }, []);
+  const fetchActivities = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_extracurricular');
+      const data = await response.json();
+      setActivities(data.extracurricular.activities || []);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+    }
+  };
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'highlights') {
@@ -43,7 +54,7 @@ const EActivities = () => {
   };
 
   const addActivity = () => {
-    if (!endDateError && currentActivity.startDate) {
+    if (!endDateError) {
       setActivities(current => [...current, currentActivity]);
       setCurrentActivity({
         organization: '',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Certificates = () => {
@@ -10,14 +10,25 @@ const Certificates = () => {
     issuer: '',
     url: ''
   });
-
+  useEffect(() => {
+    fetchCertificates();
+  }, []);
+  const fetchCertificates = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_certificates');
+      const data = await response.json();
+      setCertificates(data.certificates.certificates || []);
+    } catch (error) {
+      console.error('Error fetching certificates:', error);
+    }
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentCertificate((prev) => ({ ...prev, [name]: value }));
   };
 
   const addCertificate = async () => {
-    if (currentCertificate.name && currentCertificate.date && currentCertificate.issuer) {
+    if (currentCertificate.name) {
       setCertificates((prev) => [...prev, currentCertificate]);
 
       try {

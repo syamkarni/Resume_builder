@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 const Work = () => {
   const navigate = useNavigate();
   const [workExperiences, setWorkExperiences] = useState([]);
+  useEffect(() => {
+    fetchWorkExperiences();
+  }, []);  
   const [currentWork, setCurrentWork] = useState({
     companyName: '',
     position: '',
@@ -13,6 +17,16 @@ const Work = () => {
     descriptions: ['']
   });
   const [endDateError, setEndDateError] = useState(false);
+
+  const fetchWorkExperiences = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_work_experience');
+      const data = await response.json();
+      setWorkExperiences(data.workExperiences);
+    } catch (error) {
+      console.error('Error fetching work experiences:', error);
+    }
+  };  
 
   const handleWorkChange = (e, index) => {
     const { name, value } = e.target;

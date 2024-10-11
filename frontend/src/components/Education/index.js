@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Education = () => {
@@ -13,8 +13,19 @@ const Education = () => {
     endDate: '',
     location: ''
   });
+  useEffect(() => {
+    fetchEducations();
+  }, []);
   const [endDateError, setEndDateError] = useState(false);
-
+  const fetchEducations = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/get_education');
+      const data = await response.json();
+      setEducations(data.education.educations || []);
+    } catch (error) {
+      console.error('Error fetching educations:', error);
+    }
+  };
   const handleEChange = (e) => {
     const { name, value } = e.target;
     if (name === "endDate") {
@@ -32,8 +43,11 @@ const Education = () => {
   };
 
   const addEducation = () => {
-    if (!endDateError && currentEducation.startDate && currentEducation.endDate) {
-      setEducations(current => [...current, currentEducation]); 
+    if (!endDateError) {
+      const newEducation = { ...currentEducation };
+      setEducations(current => [...current, newEducation]); 
+      console.log("New education added:", newEducation);
+      
       setCurrentEducation({
         instituteName: '',
         url: '',
@@ -43,7 +57,10 @@ const Education = () => {
         endDate: '',
         location: ''
       });
+
       setEndDateError(false);
+    } else {
+      console.log("Please fill out all required fields.");
     }
   };
 
