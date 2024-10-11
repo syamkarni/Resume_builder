@@ -1,7 +1,7 @@
 import React from 'react';
-import './App.css';
-import BaseLayout from './components/BaseLayout';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import BaseLayout from './components/BaseLayout';
+import Home from './components/Home';
 import Description from './components/Description';
 import Pinfo from './components/Pinfo';
 import Work from './components/Work';
@@ -17,17 +17,18 @@ const App = () => {
   return (
     <Router>
       <Routes>
-          <Route path="/" element={<BaseLayout />}>
-          <Route path="/Description" element={<Description />} />
-          <Route path="/Pinfo" element={<Pinfo />} />
-          <Route path="/Work" element={<Work />} />
-          <Route path="/Education" element={<Education />} />
-          <Route path="/Project" element={<Project />} />
-          <Route path="/EActivities" element={<EActivities />} />
-          <Route path="/VData" element={<VData />} />
-          <Route path="/Certificates" element={<Certificates />} />
-          <Route path="/Awards" element={<Awards />} />
-          <Route path="/Skills" element={<Skills />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/" element={<BaseLayout />}>
+          <Route path="description" element={<Description />} />
+          <Route path="pinfo" element={<Pinfo />} />
+          <Route path="work" element={<Work />} />
+          <Route path="education" element={<Education />} />
+          <Route path="project" element={<Project />} />
+          <Route path="eactivities" element={<EActivities />} />
+          <Route path="vdata" element={<VData />} />
+          <Route path="certificates" element={<Certificates />} />
+          <Route path="awards" element={<Awards />} />
+          <Route path="skills" element={<Skills />} />
         </Route>
       </Routes>
     </Router>
