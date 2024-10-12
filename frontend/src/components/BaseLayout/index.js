@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 const BaseLayout = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <nav className="navbar navbar-dark bg-dark">
@@ -25,7 +27,7 @@ const BaseLayout = () => {
 
 
           <div className="navbar-buttons">
-            <button className="btn btn-light" onClick={() => alert("Upload JSON clicked!")}>
+            <button className="btn btn-light" onClick={() => navigate('/Ujson')}>
               Upload JSON {/* configure these later */}
             </button>
             <button className="btn btn-success" onClick={() => alert("Build Resume clicked!")}>

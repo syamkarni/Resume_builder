@@ -12,7 +12,7 @@ const Home = () => {
       {/* Upload JSON button */}
       <button
         className="btn btn-light"
-        onClick={() => alert("Upload JSON clicked!")}
+        onClick={() => navigate('/Ujson')}
         style={{ marginRight: '20px' }}  
       >
         Upload JSON
