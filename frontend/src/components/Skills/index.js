@@ -144,6 +144,22 @@ const Skills = () => {
       .catch((error) => console.error('Error downloading JSON:', error));
   };
 
+  const generateAndDownloadResume = async () => {
+    try {
+      let response = await fetch('http://127.0.0.1:5000/generate_resume');
+      const result = await response.json();
+  
+      if (result.status === 'success') {
+        window.location.href = 'http://127.0.0.1:5000/download_data';
+      } else {
+        alert('Failed to generate PDF: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+
   return (
     <div className="section-container" id="skills">
     <div className="section-main">
@@ -235,6 +251,8 @@ const Skills = () => {
 
         <button onClick={() => navigate('/Awards')}>Back</button>
         <button onClick={downloadResumeJson}>Download JSON</button>
+        <button onClick={generateAndDownloadResume}>Generate and Download Resume</button>
+
       </div>
     </div>
   );
