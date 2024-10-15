@@ -163,8 +163,7 @@ const Education = () => {
         <button type="button" onClick={addEducation}>Add Education</button>
       </div>
       <br />
-      <button onClick={() => navigate('/Work')}>Back</button>
-      <button onClick={() => navigate('/Project')}>Next</button>
+
 
       {educations.map((edu, index) => (
         <div key={index} className="education-entry">
@@ -183,6 +182,8 @@ const Education = () => {
           </button>
         </div>
       ))}
+            <button onClick={() => navigate('/Work')}>Back</button>
+            <button onClick={() => navigate('/Project')}>Next</button>
     </div>
   );
 };
