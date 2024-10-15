@@ -12,30 +12,7 @@
         "sname": "s_name",
         "zip": "zip here"
     },
-    "work": [
-        {
-            "companyName": "comp1",
-            "position": "pos2",
-            "location": "loc1",
-            "startDate": "0001-02-01",
-            "endDate": "0002-03-01",
-            "descriptions": [
-                "Desc1",
-                "Desc2"
-            ]
-        },
-        {
-            "companyName": "comp2",
-            "position": "pos22",
-            "location": "loc2",
-            "startDate": "0002-02-01",
-            "endDate": "0004-02-01",
-            "descriptions": [
-                "desc1",
-                "desc2"
-            ]
-        }
-    ],
+    "work": [],
     "education": {
         "educations": [
             {

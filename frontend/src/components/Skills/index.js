@@ -43,12 +43,12 @@ const Skills = () => {
     }
   };
 
-  const handleSkillChange = (e, categoryIndex, skillIndex) => {
-    const updatedSkillsData = [...skillsData];
-    updatedSkillsData[categoryIndex].skills[skillIndex] = e.target.value;
-    setSkillsData(updatedSkillsData);
-    saveSkillsData(updatedSkillsData, languages, interests); 
-  };
+  // const handleSkillChange = (e, categoryIndex, skillIndex) => {
+  //   const updatedSkillsData = [...skillsData];
+  //   updatedSkillsData[categoryIndex].skills[skillIndex] = e.target.value;
+  //   setSkillsData(updatedSkillsData);
+  //   saveSkillsData(updatedSkillsData, languages, interests); 
+  // };
 
   const handleCategoryInputChange = (e) => {
     setCurrentCategory({ ...currentCategory, category: e.target.value });
@@ -60,6 +60,7 @@ const Skills = () => {
     setSkillsData(updatedSkillsData);
     saveSkillsData(updatedSkillsData, languages, interests); 
   };
+  
 
   const deleteSkill = (categoryIndex, skillIndex) => {
     const updatedSkillsData = [...skillsData];
@@ -145,32 +146,51 @@ const Skills = () => {
 
   return (
     <div className="section-container" id="skills">
-      <div className="section-main">
-        <h3>Skill Categories</h3>
-        <input
-          type="text"
-          placeholder="Category"
-          value={currentCategory.category}
-          onChange={handleCategoryInputChange}
-        /><br />
-        <button onClick={addCategory}>Add Category</button>
-
-        {skillsData.map((category, categoryIndex) => (
-          <div key={categoryIndex}>
-            <h4>{category.category}</h4>
-            <ul>
-              {category.skills.map((skill, skillIndex) => (
-                <li key={skillIndex}>
-                  {skill}
-                  {' '}
-                  <button onClick={() => deleteSkill(categoryIndex, skillIndex)}>Delete Skill</button>
-                </li>
-              ))}
-            </ul>
+    <div className="section-main">
+      <h3>Skill Categories</h3>
+      <input
+        type="text"
+        placeholder="Category"
+        value={currentCategory.category}
+        onChange={handleCategoryInputChange}
+      /><br />
+      <button onClick={addCategory}>Add Category</button>
+  
+      {skillsData.map((category, categoryIndex) => (
+        <div key={categoryIndex}>
+          <h4>{category.category}</h4>
+          <ul>
+            {category.skills.map((skill, skillIndex) => (
+              <li key={skillIndex}>
+                {skill}
+                {' '}
+                <button onClick={() => deleteSkill(categoryIndex, skillIndex)}>
+                  Delete Skill
+                </button>
+              </li>
+            ))}
+          </ul>
+  
+          <div>
+            <input
+              type="text"
+              placeholder="Add new skill"
+              value={currentCategory.skills[0] || ''}
+              onChange={(e) =>
+                setCurrentCategory((prev) => ({
+                  ...prev,
+                  skills: [e.target.value],
+                }))
+              }
+            />
             <button onClick={() => addSkillField(categoryIndex)}>Add Skill</button>
-            <button onClick={() => deleteCategory(categoryIndex)}>Delete Category</button>
           </div>
-        ))}
+          <br />
+          <button onClick={() => deleteCategory(categoryIndex)}>
+            Delete Category
+          </button>
+        </div>
+      ))}
 
         <h3>Languages</h3>
         <input
