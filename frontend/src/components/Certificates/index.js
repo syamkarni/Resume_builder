@@ -10,9 +10,11 @@ const Certificates = () => {
     issuer: '',
     url: ''
   });
+
   useEffect(() => {
     fetchCertificates();
   }, []);
+
   const fetchCertificates = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_certificates');
@@ -22,6 +24,7 @@ const Certificates = () => {
       console.error('Error fetching certificates:', error);
     }
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentCertificate((prev) => ({ ...prev, [name]: value }));
@@ -29,26 +32,9 @@ const Certificates = () => {
 
   const addCertificate = async () => {
     if (currentCertificate.name) {
-      setCertificates((prev) => [...prev, currentCertificate]);
-
-      try {
-        const response = await fetch('http://127.0.0.1:5000/save_certificates', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ certificates: [...certificates, currentCertificate] }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to save certificate');
-        }
-
-        const data = await response.json();
-        console.log('Certificate saved:', data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      const updatedCertificates = [...certificates, currentCertificate];
+      setCertificates(updatedCertificates);
+      await saveCertificates(updatedCertificates);
 
       setCurrentCertificate({
         name: '',
@@ -56,6 +42,34 @@ const Certificates = () => {
         issuer: '',
         url: ''
       });
+    }
+  };
+
+  const deleteCertificate = async (index) => {
+    if (window.confirm('Are you sure you want to delete this certificate?')) {
+      const updatedCertificates = certificates.filter((_, i) => i !== index);
+      setCertificates(updatedCertificates);
+      await saveCertificates(updatedCertificates);
+    }
+  };
+
+  const saveCertificates = async (data) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save_certificates', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ certificates: data }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save certificates');
+      }
+
+      console.log('Certificates saved:', await response.json());
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -109,7 +123,17 @@ const Certificates = () => {
               <h3>{certificate.name}</h3>
               <p>Issued by: {certificate.issuer}</p>
               <p>Date: {certificate.date}</p>
-              {certificate.url && <a href={certificate.url} target="_blank" rel="noopener noreferrer">View Certificate</a>}
+              {certificate.url && (
+                <a href={certificate.url} target="_blank" rel="noopener noreferrer">View Certificate</a>
+              )}
+              <br></br>
+              <button
+                type="button"
+                onClick={() => deleteCertificate(index)}
+                style={{ color: 'red', marginTop: '10px' }}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>

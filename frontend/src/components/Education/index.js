@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Education = () => {
   const navigate = useNavigate();
-  const [educations, setEducations] = useState([]); 
+  const [educations, setEducations] = useState([]);
   const [currentEducation, setCurrentEducation] = useState({
     instituteName: '',
     url: '',
@@ -13,10 +13,12 @@ const Education = () => {
     endDate: '',
     location: ''
   });
+  const [endDateError, setEndDateError] = useState(false);
+
   useEffect(() => {
     fetchEducations();
   }, []);
-  const [endDateError, setEndDateError] = useState(false);
+
   const fetchEducations = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_education');
@@ -26,28 +28,27 @@ const Education = () => {
       console.error('Error fetching educations:', error);
     }
   };
+
   const handleEChange = (e) => {
     const { name, value } = e.target;
-    if (name === "endDate") {
+    if (name === 'endDate') {
       const startDate = new Date(currentEducation.startDate);
       const endDate = new Date(value);
-      if (endDate <= startDate) {
-        setEndDateError(true);
-      } else {
-        setEndDateError(false);
-        setCurrentEducation(current => ({ ...current, [name]: value }));
-      }
+      setEndDateError(endDate <= startDate);
+      setCurrentEducation((prev) => ({ ...prev, [name]: value }));
     } else {
-      setCurrentEducation(current => ({ ...current, [name]: value }));
+      setCurrentEducation((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const addEducation = () => {
+  const addEducation = async () => {
     if (!endDateError) {
       const newEducation = { ...currentEducation };
-      setEducations(current => [...current, newEducation]); 
-      console.log("New education added:", newEducation);
-      
+      const updatedEducations = [...educations, newEducation];
+      setEducations(updatedEducations);
+      await saveAllEducations(updatedEducations);
+
+
       setCurrentEducation({
         instituteName: '',
         url: '',
@@ -57,29 +58,30 @@ const Education = () => {
         endDate: '',
         location: ''
       });
-
       setEndDateError(false);
-    } else {
-      console.log("Please fill out all required fields.");
     }
   };
 
-  const saveAllEducations = async () => {
+  const deleteEducation = async (index) => {
+    if (window.confirm('Are you sure you want to delete this education?')) {
+      const updatedEducations = educations.filter((_, i) => i !== index);
+      setEducations(updatedEducations);
+      await saveAllEducations(updatedEducations); 
+    }
+  };
+
+  const saveAllEducations = async (dataToSave) => {
     try {
       const response = await fetch('http://127.0.0.1:5000/save_education', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ educations }),
+        body: JSON.stringify({ educations: dataToSave }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save educations');
-      }
-
-      const data = await response.json();
-      console.log('Education data saved:', data);
+      if (!response.ok) throw new Error('Failed to save educations');
+      console.log('Education data saved:', await response.json());
     } catch (error) {
       console.error('Error:', error);
     }
@@ -162,14 +164,7 @@ const Education = () => {
       </div>
       <br />
       <button onClick={() => navigate('/Work')}>Back</button>
-      <button
-        onClick={() => {
-          saveAllEducations(); 
-          navigate('/Project');
-        }}
-      >
-        Next
-      </button>
+      <button onClick={() => navigate('/Project')}>Next</button>
 
       {educations.map((edu, index) => (
         <div key={index} className="education-entry">
@@ -178,6 +173,14 @@ const Education = () => {
           <p>{edu.startDate} to {edu.endDate}</p>
           <p>{edu.location}</p>
           <a href={edu.url} target="_blank" rel="noopener noreferrer">Institute Website</a>
+          <br />
+          <button
+            type="button"
+            onClick={() => deleteEducation(index)}
+            style={{ color: 'red', marginTop: '10px' }}
+          >
+            Delete
+          </button>
         </div>
       ))}
     </div>

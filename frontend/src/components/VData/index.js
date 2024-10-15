@@ -14,9 +14,11 @@ const VData = () => {
     highlights: ['']
   });
   const [endDateError, setEndDateError] = useState(false);
+
   useEffect(() => {
     fetchVolunteerData();
   }, []);
+
   const fetchVolunteerData = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_volunteer_data');
@@ -26,6 +28,7 @@ const VData = () => {
       console.error('Error fetching volunteer data:', error);
     }
   };
+
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'highlights') {
@@ -35,12 +38,8 @@ const VData = () => {
     } else if (name === "endDate") {
       const startDate = new Date(currentVolunteer.startDate);
       const endDate = new Date(value);
-      if (endDate < startDate) {
-        setEndDateError(true);
-      } else {
-        setEndDateError(false);
-        setCurrentVolunteer({ ...currentVolunteer, [name]: value });
-      }
+      setEndDateError(endDate < startDate);
+      setCurrentVolunteer({ ...currentVolunteer, [name]: value });
     } else {
       setCurrentVolunteer({ ...currentVolunteer, [name]: value });
     }
@@ -55,27 +54,9 @@ const VData = () => {
 
   const addVolunteerEntry = async () => {
     if (!endDateError) {
-      setVolunteerData(current => [...current, currentVolunteer]);
-
-      try {
-        const response = await fetch('http://127.0.0.1:5000/save_volunteer_data', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ volunteerData: [...volunteerData, currentVolunteer] }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to save volunteer data');
-        }
-
-        const data = await response.json();
-        console.log('Volunteer data saved:', data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-
+      const updatedVolunteerData = [...volunteerData, currentVolunteer];
+      setVolunteerData(updatedVolunteerData);
+      await saveVolunteerData(updatedVolunteerData);
       setCurrentVolunteer({
         organization: '',
         position: '',
@@ -85,7 +66,34 @@ const VData = () => {
         endDate: '',
         highlights: ['']
       });
-      setEndDateError(false);
+    }
+  };
+
+  const deleteVolunteerEntry = async (index) => {
+    if (window.confirm('Are you sure you want to delete this volunteer entry?')) {
+      const updatedVolunteerData = volunteerData.filter((_, i) => i !== index);
+      setVolunteerData(updatedVolunteerData);
+      await saveVolunteerData(updatedVolunteerData);
+    }
+  };
+
+  const saveVolunteerData = async (data) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save_volunteer_data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ volunteerData: data }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save volunteer data');
+      }
+
+      console.log('Volunteer data saved:', await response.json());
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
@@ -177,15 +185,19 @@ const VData = () => {
             {volunteer.highlights.map((highlight, highlightIndex) => (
               <p key={highlightIndex}>{highlight}</p>
             ))}
+            <button
+              type="button"
+              onClick={() => deleteVolunteerEntry(index)}
+              style={{ color: 'red', marginTop: '10px' }}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
       <br />
       <button onClick={() => navigate('/EActivities')}>Back</button>
-      <button onClick={() => {
-        addVolunteerEntry();
-        navigate('/Certificates');
-      }}>Next</button>
+      <button onClick={() => navigate('/Certificates')}>Next</button>
     </div>
   );
 };

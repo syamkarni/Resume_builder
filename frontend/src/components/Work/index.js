@@ -1,13 +1,9 @@
-import React, { useState , useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Work = () => {
   const navigate = useNavigate();
   const [workExperiences, setWorkExperiences] = useState([]);
-  useEffect(() => {
-    fetchWorkExperiences();
-  }, []);  
   const [currentWork, setCurrentWork] = useState({
     companyName: '',
     position: '',
@@ -18,6 +14,10 @@ const Work = () => {
   });
   const [endDateError, setEndDateError] = useState(false);
 
+  useEffect(() => {
+    fetchWorkExperiences();
+  }, []);
+
   const fetchWorkExperiences = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_work_experience');
@@ -26,30 +26,29 @@ const Work = () => {
     } catch (error) {
       console.error('Error fetching work experiences:', error);
     }
-  };  
+  };
 
   const handleWorkChange = (e, index) => {
     const { name, value } = e.target;
     if (name === "descriptions") {
       const updatedDescriptions = [...currentWork.descriptions];
-      updatedDescriptions[index] = value; 
+      updatedDescriptions[index] = value;
       setCurrentWork({ ...currentWork, descriptions: updatedDescriptions });
-    } else if (name === "endDate") {
+    } else if (name === 'endDate') {
       const startDate = new Date(currentWork.startDate);
       const endDate = new Date(value);
-      if (endDate <= startDate) {
-        setEndDateError(true);
-      } else {
-        setEndDateError(false);
-        setCurrentWork({ ...currentWork, [name]: value });
-      }
+      setEndDateError(endDate <= startDate);
+      setCurrentWork({ ...currentWork, [name]: value });
     } else {
       setCurrentWork({ ...currentWork, [name]: value });
     }
   };
 
   const addDescriptionField = () => {
-    setCurrentWork({ ...currentWork, descriptions: [...currentWork.descriptions, ''] });
+    setCurrentWork({
+      ...currentWork,
+      descriptions: [...currentWork.descriptions, '']
+    });
   };
 
   const addWorkExperience = () => {
@@ -66,22 +65,27 @@ const Work = () => {
     }
   };
 
-  const saveAllWorkExperiences = async () => {
+  const deleteWorkExperience = async (index) => {
+    if (window.confirm('Are you sure you want to delete this work experience?')) {
+      const updatedWorkExperiences = workExperiences.filter((_, i) => i !== index);
+      setWorkExperiences(updatedWorkExperiences);
+      await saveAllWorkExperiences(updatedWorkExperiences);
+    }
+  };
+  
+
+  const saveAllWorkExperiences = async (updatedWorkExperiences) => {
     try {
       const response = await fetch('http://127.0.0.1:5000/save_work_experience', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ workExperiences }),
+        body: JSON.stringify({ workExperiences: updatedWorkExperiences }),
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to save work experiences');
-      }
-
-      const data = await response.json();
-      console.log('Work experiences saved:', data);
+  
+      if (!response.ok) throw new Error('Failed to save work experiences');
+      console.log('Work experiences saved:', await response.json());
     } catch (error) {
       console.error('Error:', error);
     }
@@ -166,6 +170,13 @@ const Work = () => {
             {work.descriptions.map((desc, descIndex) => (
               <p key={descIndex}>{desc}</p>
             ))}
+            <button
+              type="button"
+              onClick={() => deleteWorkExperience(index)}
+              style={{ color: 'red', marginTop: '10px' }}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>

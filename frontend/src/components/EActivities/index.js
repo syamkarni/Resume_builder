@@ -14,9 +14,11 @@ const EActivities = () => {
     highlights: ['']
   });
   const [endDateError, setEndDateError] = useState(false);
+
   useEffect(() => {
     fetchActivities();
   }, []);
+
   const fetchActivities = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_extracurricular');
@@ -26,21 +28,18 @@ const EActivities = () => {
       console.error('Error fetching activities:', error);
     }
   };
+
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'highlights') {
       const updatedHighlights = [...currentActivity.highlights];
       updatedHighlights[index] = value;
       setCurrentActivity({ ...currentActivity, highlights: updatedHighlights });
-    } else if (name === "endDate") {
+    } else if (name === 'endDate') {
       const startDate = new Date(currentActivity.startDate);
       const endDate = new Date(value);
-      if (endDate < startDate) {
-        setEndDateError(true);
-      } else {
-        setEndDateError(false);
-        setCurrentActivity(current => ({ ...current, [name]: value }));
-      }
+      setEndDateError(endDate < startDate);
+      setCurrentActivity(current => ({ ...current, [name]: value }));
     } else {
       setCurrentActivity(current => ({ ...current, [name]: value }));
     }
@@ -53,9 +52,11 @@ const EActivities = () => {
     }));
   };
 
-  const addActivity = () => {
+  const addActivity = async () => {
     if (!endDateError) {
-      setActivities(current => [...current, currentActivity]);
+      const updatedActivities = [...activities, currentActivity];
+      setActivities(updatedActivities);
+      await saveAllActivities(updatedActivities);
       setCurrentActivity({
         organization: '',
         position: '',
@@ -65,26 +66,29 @@ const EActivities = () => {
         endDate: '',
         highlights: ['']
       });
-      setEndDateError(false);
     }
   };
 
-  const saveAllActivities = async () => {
+  const deleteActivity = async (index) => {
+    if (window.confirm('Are you sure you want to delete this activity?')) {
+      const updatedActivities = activities.filter((_, i) => i !== index);
+      setActivities(updatedActivities);
+      await saveAllActivities(updatedActivities);
+    }
+  };
+
+  const saveAllActivities = async (updatedActivities) => {
     try {
       const response = await fetch('http://127.0.0.1:5000/save_extracurricular', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ activities }),
+        body: JSON.stringify({ activities: updatedActivities }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save activities');
-      }
-
-      const data = await response.json();
-      console.log('Activities saved:', data);
+      if (!response.ok) throw new Error('Failed to save activities');
+      console.log('Activities saved:', await response.json());
     } catch (error) {
       console.error('Error:', error);
     }
@@ -177,6 +181,13 @@ const EActivities = () => {
             {activity.highlights.map((highlight, highlightIndex) => (
               <p key={highlightIndex}>{highlight}</p>
             ))}
+            <button
+              type="button"
+              onClick={() => deleteActivity(index)}
+              style={{ color: 'red', marginTop: '10px' }}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
@@ -184,7 +195,7 @@ const EActivities = () => {
       <button onClick={() => navigate('/Project')}>Back</button>
       <button
         onClick={() => {
-          saveAllActivities();
+          saveAllActivities(activities);
           navigate('/Vdata');
         }}
       >

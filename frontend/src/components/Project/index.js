@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Project = () => {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState([]);  
+  const [projects, setProjects] = useState([]);
   const [currentProject, setCurrentProject] = useState({
     projectName: '',
     url: '',
@@ -12,10 +12,12 @@ const Project = () => {
     endDate: '',
     descriptions: ['']
   });
+  const [endDateError, setEndDateError] = useState(false);
+
   useEffect(() => {
     fetchProjects();
   }, []);
-  const [endDateError, setEndDateError] = useState(false);
+
   const fetchProjects = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_projects');
@@ -25,23 +27,20 @@ const Project = () => {
       console.error('Error fetching projects:', error);
     }
   };
+
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     if (name === 'descriptions') {
-        const updatedDescriptions = [...currentProject.descriptions];
-        updatedDescriptions[index] = value;
-        setCurrentProject({ ...currentProject, descriptions: updatedDescriptions });
-    } else if (name === "endDate") {
-        const startDate = new Date(currentProject.startDate);
-        const endDate = new Date(value);
-        if (endDate <= startDate) {
-            setEndDateError(true);
-        } else {
-            setEndDateError(false);
-            setCurrentProject({ ...currentProject, [name]: value });
-        }
+      const updatedDescriptions = [...currentProject.descriptions];
+      updatedDescriptions[index] = value;
+      setCurrentProject({ ...currentProject, descriptions: updatedDescriptions });
+    } else if (name === 'endDate') {
+      const startDate = new Date(currentProject.startDate);
+      const endDate = new Date(value);
+      setEndDateError(endDate <= startDate);
+      setCurrentProject({ ...currentProject, [name]: value });
     } else {
-        setCurrentProject({ ...currentProject, [name]: value });
+      setCurrentProject({ ...currentProject, [name]: value });
     }
   };
 
@@ -52,36 +51,42 @@ const Project = () => {
     });
   };
 
-  const addProject = () => {
+  const addProject = async () => {
     if (!endDateError) {
-        setProjects([...projects, currentProject]);
-        setCurrentProject({
-            projectName: '',
-            url: '',
-            subtitle: '',
-            startDate: '',
-            endDate: '',
-            descriptions: ['']
-        });
+      const updatedProjects = [...projects, currentProject];
+      setProjects(updatedProjects);
+      await saveAllProjects(updatedProjects);
+      setCurrentProject({
+        projectName: '',
+        url: '',
+        subtitle: '',
+        startDate: '',
+        endDate: '',
+        descriptions: ['']
+      });
     }
   };
 
-  const saveAllProjects = async () => {
+  const deleteProject = async (index) => {
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      const updatedProjects = projects.filter((_, i) => i !== index);
+      setProjects(updatedProjects);
+      await saveAllProjects(updatedProjects);
+    }
+  };
+
+  const saveAllProjects = async (updatedProjects) => {
     try {
       const response = await fetch('http://127.0.0.1:5000/save_projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ projects }),
+        body: JSON.stringify({ projects: updatedProjects }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to save projects');
-      }
-
-      const data = await response.json();
-      console.log('Projects saved:', data);
+      if (!response.ok) throw new Error('Failed to save projects');
+      console.log('Projects saved:', await response.json());
     } catch (error) {
       console.error('Error:', error);
     }
@@ -165,6 +170,13 @@ const Project = () => {
             {project.descriptions.map((desc, descIndex) => (
               <p key={`desc-${descIndex}`}>{desc}</p>
             ))}
+            <button
+              type="button"
+              onClick={() => deleteProject(index)}
+              style={{ color: 'red', marginTop: '10px' }}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
@@ -172,7 +184,7 @@ const Project = () => {
       <button onClick={() => navigate('/Education')}>Back</button>
       <button
         onClick={() => {
-          saveAllProjects(); 
+          saveAllProjects(projects); 
           navigate('/Eactivities');
         }}
       >

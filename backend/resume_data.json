@@ -15,71 +15,41 @@
     "work": [
         {
             "companyName": "comp1",
-            "position": "pos2",
-            "location": "loc1",
-            "startDate": "0001-02-01",
-            "endDate": "0002-03-01",
             "descriptions": [
                 "Desc1",
                 "Desc2"
-            ]
-        },
-        {
-            "companyName": "comp2",
-            "position": "pos22",
-            "location": "loc2",
-            "startDate": "0002-02-01",
-            "endDate": "0004-02-01",
-            "descriptions": [
-                "desc1",
-                "desc2"
-            ]
+            ],
+            "endDate": "0002-03-01",
+            "location": "loc1",
+            "position": "pos2",
+            "startDate": "0001-02-01"
         }
     ],
     "education": {
         "educations": [
             {
-                "instituteName": "col_1",
-                "url": "url here",
-                "area": "area of study",
-                "studyType": "type of study",
-                "startDate": "0001-02-01",
-                "endDate": "0001-02-02",
-                "location": "loc"
-            },
-            {
-                "instituteName": "institute 2",
-                "url": "url2",
                 "area": "area",
-                "studyType": "type",
-                "startDate": "0001-02-01",
                 "endDate": "0002-02-01",
-                "location": "loc2"
+                "instituteName": "institute 2",
+                "location": "loc2",
+                "startDate": "0001-02-01",
+                "studyType": "type",
+                "url": "url2"
             }
         ]
     },
     "projects": {
         "projects": [
             {
-                "projectName": "pro1",
-                "url": "url",
-                "subtitle": "subtitle",
-                "startDate": "0001-02-01",
-                "endDate": "0003-02-01",
                 "descriptions": [
                     "desc1",
                     "desc2"
-                ]
-            },
-            {
-                "projectName": "pro2",
-                "url": "url here",
-                "subtitle": "subittle her",
-                "startDate": "0003-02-01",
-                "endDate": "0005-02-02",
-                "descriptions": [
-                    "desc1"
-                ]
+                ],
+                "endDate": "0003-02-01",
+                "projectName": "pro1",
+                "startDate": "0001-02-01",
+                "subtitle": "subtitle",
+                "url": "url"
             }
         ]
     },
@@ -89,8 +59,7 @@
             "skills": [
                 "tech",
                 "dev1",
-                "dev2",
-                ""
+                "dev2"
             ]
         },
         {
@@ -100,136 +69,65 @@
                 "te2",
                 "te3"
             ]
-        },
-        {
-            "category": "skills",
-            "skills": [
-                "1",
-                "2"
-            ]
         }
     ],
-    "languages": [
-        {
-            "language": "lang1",
-            "fluency": "Native Speaker"
-        },
-        {
-            "language": "lang2",
-            "fluency": "Professional Proficiency"
-        }
-    ],
-    "interests": [
-        "int1",
-        "int2"
-    ],
+    "languages": [],
+    "interests": [],
     "certificates": {
         "certificates": [
             {
-                "name": "certi_1",
                 "date": "0001-11-11",
                 "issuer": "issuerhere",
+                "name": "certi_1",
                 "url": "ur4llll"
-            },
-            {
-                "name": "certi_2",
-                "date": "3333-02-21",
-                "issuer": "issuer",
-                "url": "urlll"
             }
         ]
     },
     "awards": {
         "awards": [
             {
-                "title": "award_titl",
                 "date": "0111-11-11",
-                "issuer": "issuer1",
-                "url": "urlll",
-                "location": "loc",
                 "highlights": [
                     "highg",
                     "2",
                     "3"
-                ]
-            },
-            {
-                "title": "title+_111",
-                "date": "0222-02-01",
-                "issuer": "issuer_22",
-                "url": "urll ",
-                "location": "location ",
-                "highlights": [
-                    "1",
-                    "2"
-                ]
+                ],
+                "issuer": "issuer1",
+                "location": "loc",
+                "title": "award_titl",
+                "url": "urlll"
             }
         ]
     },
     "extracurricular": {
         "activities": [
             {
-                "organization": "org1",
-                "position": "pos",
-                "location": "loc",
-                "url": "url",
-                "startDate": "0001-01-02",
                 "endDate": "0023-02-01",
                 "highlights": [
                     "high1",
                     "high2"
-                ]
-            },
-            {
-                "organization": "org2",
-                "position": "pos ",
+                ],
                 "location": "loc",
-                "url": "url",
-                "startDate": "0001-02-01",
-                "endDate": "0004-02-01",
-                "highlights": [
-                    "HIGH1",
-                    "HIGH2"
-                ]
+                "organization": "org1",
+                "position": "pos",
+                "startDate": "0001-01-02",
+                "url": "url"
             }
         ]
     },
     "volunteer_data": {
         "volunteerData": [
             {
-                "organization": "org_v1",
-                "position": "pos",
-                "location": "loc ",
-                "url": "url",
-                "startDate": "0001-02-01",
                 "endDate": "0004-02-12",
                 "highlights": [
                     "high1",
                     "2"
-                ]
-            },
-            {
-                "organization": "org_v2",
+                ],
+                "location": "loc ",
+                "organization": "org_v1",
                 "position": "pos",
-                "location": "loc",
-                "url": "urll",
-                "startDate": "0001-12-11",
-                "endDate": "0005-12-11",
-                "highlights": [
-                    "1",
-                    "2"
-                ]
-            },
-            {
-                "organization": "",
-                "position": "",
-                "location": "",
-                "url": "",
-                "startDate": "",
-                "endDate": "",
-                "highlights": [
-                    ""
-                ]
+                "startDate": "0001-02-01",
+                "url": "url"
             }
         ]
     },
