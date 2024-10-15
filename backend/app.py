@@ -1,11 +1,19 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import json, os
+import subprocess
+from io import BytesIO
+import zipfile
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
-
+########################################################
+TYPST_FOLDER = os.path.join(os.getcwd(), 'typst')
+MAIN_TYP_PATH = os.path.join(TYPST_FOLDER, 'main.typ')
+PDF_OUTPUT_PATH = os.path.join(TYPST_FOLDER, 'resume.pdf')
+DATA_JSON_PATH = os.path.join(TYPST_FOLDER, 'data.json')
+########################################################
 resume_data = {
     "personal": {}, 
     "work": [],
@@ -170,5 +178,57 @@ def get_description():
     return jsonify({"description": resume_data.get('description', '')}), 200
 #------------------------------------------------------------------------------------------------
 
+@app.route('/generate_resume', methods=['GET'])
+def generate_resume():
+    try:
+
+        with open(DATA_JSON_PATH, 'w') as f:
+            json.dump(resume_data, f, indent=4)
+
+        print(f"Saved data to {DATA_JSON_PATH}")
+
+        compile_command = ['typst', 'compile', MAIN_TYP_PATH, PDF_OUTPUT_PATH]
+        result = subprocess.run(compile_command, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            print("Compilation failed with the following error:")
+            print(result.stderr)
+            return jsonify({
+                'status': 'error',
+                'message': 'Compilation failed',
+                'error': result.stderr
+            }), 500
+
+        return jsonify({'status': 'success', 'message': 'PDF generated successfully!'})
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+
+@app.route('/download_data', methods=['GET'])
+def download_data():
+    """API to download both resume.pdf and data.json as a ZIP file."""
+    try:
+        if not (os.path.exists(PDF_OUTPUT_PATH) and os.path.exists(DATA_JSON_PATH)):
+            return jsonify({'status': 'error', 'message': 'Files not found'}), 404
+
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+            zip_file.write(PDF_OUTPUT_PATH, arcname='resume.pdf')
+            zip_file.write(DATA_JSON_PATH, arcname='data.json')
+
+        zip_buffer.seek(0)  
+
+        return send_file(
+            zip_buffer,
+            as_attachment=True,
+            download_name='resume_package.zip',
+            mimetype='application/zip'
+        )
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 if __name__ == '__main__':
     app.run(debug=True)
