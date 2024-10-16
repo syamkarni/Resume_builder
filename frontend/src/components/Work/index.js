@@ -22,6 +22,7 @@ const Work = () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/get_work_experience');
       const data = await response.json();
+      console.log("Fetched work experiences:", data);
       setWorkExperiences(data.workExperiences);
     } catch (error) {
       console.error('Error fetching work experiences:', error);
@@ -51,9 +52,13 @@ const Work = () => {
     });
   };
 
-  const addWorkExperience = () => {
+  const addWorkExperience = async () => {
     if (!endDateError) {
-      setWorkExperiences([...workExperiences, currentWork]);
+      const updatedWorkExperiences = [...workExperiences, currentWork];
+      setWorkExperiences(updatedWorkExperiences);
+      
+      await saveAllWorkExperiences(updatedWorkExperiences);
+      
       setCurrentWork({
         companyName: '',
         position: '',
@@ -72,7 +77,6 @@ const Work = () => {
       await saveAllWorkExperiences(updatedWorkExperiences);
     }
   };
-  
 
   const saveAllWorkExperiences = async (updatedWorkExperiences) => {
     try {
@@ -83,11 +87,11 @@ const Work = () => {
         },
         body: JSON.stringify({ workExperiences: updatedWorkExperiences }),
       });
-  
+
       if (!response.ok) throw new Error('Failed to save work experiences');
       console.log('Work experiences saved:', await response.json());
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error saving work experiences:', error);
     }
   };
 
@@ -183,8 +187,8 @@ const Work = () => {
       <br />
       <button onClick={() => navigate('/Pinfo')}>Back</button>
       <button
-        onClick={() => {
-          saveAllWorkExperiences();
+        onClick={async () => {
+          await saveAllWorkExperiences(workExperiences);
           navigate('/Education');
         }}
       >
