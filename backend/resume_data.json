@@ -1,10 +1,10 @@
 {
     "personal": {
+        "fname": "f_name",
         "address": "address here",
         "city": "city here",
         "country": "country here",
         "email": "email@email.com",
-        "fname": "f_name",
         "github": "https://github.com",
         "linkedin": "https://linkedin.com",
         "phone": "989898998989",
@@ -15,25 +15,25 @@
     "work": [
         {
             "companyName": "comp1",
-            "position": "pos2",
-            "location": "loc1",
-            "startDate": "0001-02-01",
-            "endDate": "0002-03-01",
             "descriptions": [
                 "Desc1",
                 "Desc2"
-            ]
+            ],
+            "endDate": "0002-03-01",
+            "location": "loc1",
+            "position": "pos2",
+            "startDate": "0001-02-01"
         },
         {
             "companyName": "comp2",
-            "position": "pos22",
-            "location": "loc2",
-            "startDate": "0002-02-01",
-            "endDate": "0004-02-01",
             "descriptions": [
                 "desc1",
                 "desc2"
-            ]
+            ],
+            "endDate": "0004-02-01",
+            "location": "loc2",
+            "position": "pos22",
+            "startDate": "0002-02-01"
         }
     ],
     "education": {
@@ -61,25 +61,25 @@
     "projects": {
         "projects": [
             {
-                "projectName": "pro1",
-                "url": "url",
-                "subtitle": "subtitle",
-                "startDate": "0001-02-01",
-                "endDate": "0003-02-01",
                 "descriptions": [
                     "desc1",
                     "desc2"
-                ]
+                ],
+                "endDate": "0003-02-01",
+                "projectName": "pro1",
+                "startDate": "0001-02-01",
+                "subtitle": "subtitle",
+                "url": "url"
             },
             {
-                "projectName": "pro2",
-                "url": "url here",
-                "subtitle": "subittle her",
-                "startDate": "0003-02-01",
-                "endDate": "0005-02-02",
                 "descriptions": [
                     "desc1"
-                ]
+                ],
+                "endDate": "0005-02-02",
+                "projectName": "pro2",
+                "startDate": "0003-02-01",
+                "subtitle": "subittle her",
+                "url": "url here"
             }
         ]
     },
@@ -169,28 +169,28 @@
     "extracurricular": {
         "activities": [
             {
-                "organization": "org1",
-                "position": "pos",
-                "location": "loc",
-                "url": "url",
-                "startDate": "0001-01-02",
                 "endDate": "0023-02-01",
                 "highlights": [
                     "high1",
                     "high2"
-                ]
+                ],
+                "location": "loc",
+                "organization": "org1",
+                "position": "pos",
+                "startDate": "0001-01-02",
+                "url": "url"
             },
             {
-                "organization": "org2",
-                "position": "pos ",
-                "location": "loc",
-                "url": "url",
-                "startDate": "0001-02-01",
                 "endDate": "0004-02-01",
                 "highlights": [
                     "HIGH1",
                     "HIGH2"
-                ]
+                ],
+                "location": "loc",
+                "organization": "org2",
+                "position": "pos ",
+                "startDate": "0001-02-01",
+                "url": "url"
             }
         ]
     },
